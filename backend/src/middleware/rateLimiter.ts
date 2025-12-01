@@ -15,13 +15,14 @@ export const loginLimiter = rateLimit({
 // Rate limiter for general API requests
 export const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // 100 requests per window
+  max: process.env.NODE_ENV === 'development' ? 1000 : 100, // 1000 in dev, 100 in production
   message: {
     success: false,
     message: 'طلبات كثيرة جداً. يرجى المحاولة لاحقاً.',
   },
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => process.env.NODE_ENV === 'development' && req.ip === '::1', // Skip for localhost in dev
 });
 
 // Rate limiter for file uploads

@@ -69,8 +69,8 @@ const HeroSlider: React.FC = () => {
 
   return (
     <div className="relative w-full overflow-hidden bg-gray-100">
-      {/* Responsive height - taller on mobile to show full image */}
-      <div className="relative w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[550px] xl:h-[600px]">
+      {/* Fixed height container - responsive for each device */}
+      <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
         {heroImages.map((hero, index) => {
           const isActive = index === currentIndex;
           
@@ -81,28 +81,28 @@ const HeroSlider: React.FC = () => {
                 isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'
               }`}
             >
-              {/* استخدام picture element للصور المتجاوبة */}
+              {/* Picture element for responsive images */}
               <picture>
-                {/* للهواتف: أقل من 640px */}
+                {/* Mobile: < 640px */}
                 <source
                   media="(max-width: 639px)"
                   srcSet={hero.mobileImage}
                 />
-                {/* للتابلت: من 640px إلى 1023px */}
+                {/* Tablet: 640px - 1023px */}
                 <source
                   media="(min-width: 640px) and (max-width: 1023px)"
                   srcSet={hero.tabletImage}
                 />
-                {/* للكمبيوتر والشاشات الكبيرة: أكبر من 1024px */}
+                {/* Desktop: >= 1024px */}
                 <source
                   media="(min-width: 1024px)"
                   srcSet={hero.desktopImage}
                 />
-                {/* الصورة الافتراضية */}
+                {/* Default image */}
                 <img
                   src={hero.desktopImage}
                   alt={hero.alt}
-                  className="w-full h-full object-contain object-center"
+                  className="w-full h-full object-contain md:object-cover object-center bg-white"
                   loading="eager"
                   draggable="false"
                   onError={(e) => {
@@ -115,7 +115,7 @@ const HeroSlider: React.FC = () => {
           );
         })}
         
-        {/* Overlay gradient خفيف */}
+        {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent z-20 pointer-events-none" />
         
         {/* Navigation Dots */}

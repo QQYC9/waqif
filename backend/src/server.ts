@@ -34,9 +34,12 @@ connectDB();
 
 const app = express();
 
+// Trust proxy for Railway/Vercel
+app.set('trust proxy', 1);
+
 // Compression Middleware - Compress all responses
 app.use(compression({
-  filter: (req, res) => {
+  filter: (req: any, res: any) => {
     if (req.headers['x-no-compression']) {
       return false;
     }

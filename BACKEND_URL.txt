@@ -1,0 +1,16 @@
+Backend URL من Railway:
+
+من الـ Railway Dashboard، اذهب إلى:
+1. Settings → Networking
+2. انسخ الـ Domain
+
+أو افتح:
+https://railway.com/project/09bada17-54bf-41a7-bcc0-9f7868568790
+
+ثم اختر الـ Backend service وانسخ الـ URL
+
+مثال:
+https://waqif-backend-production-xxxx.up.railway.app
+
+استخدم هذا الرابط + /api في Vercel:
+https://waqif-backend-production-xxxx.up.railway.app/api

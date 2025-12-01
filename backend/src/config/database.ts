@@ -4,17 +4,14 @@ import { Sequelize } from 'sequelize';
 const sequelize = process.env.DATABASE_URL
   ? new Sequelize(process.env.DATABASE_URL, {
       dialect: 'postgres',
-      logging: process.env.NODE_ENV === 'development' ? console.log : false,
+      logging: console.log,
       dialectOptions: {
-        ssl: process.env.NODE_ENV === 'production' ? {
-          require: true,
-          rejectUnauthorized: false
-        } : false
+        connectTimeout: 30000,
       },
       pool: {
         max: 5,
         min: 0,
-        acquire: 30000,
+        acquire: 60000,
         idle: 10000,
       },
     })
@@ -37,18 +34,18 @@ const sequelize = process.env.DATABASE_URL
     );
 
 export const connectDB = async (): Promise<void> => {
+  console.log('🔄 Connecting to PostgreSQL...');
+  console.log('📍 DATABASE_URL exists:', !!process.env.DATABASE_URL);
   try {
     await sequelize.authenticate();
     console.log('✅ PostgreSQL Connected Successfully');
     
-    // Sync models (في التطوير فقط)
-    if (process.env.NODE_ENV === 'development') {
-      await sequelize.sync({ alter: false });
-      console.log('✅ Database models synchronized');
-    }
+    // Sync models
+    await sequelize.sync({ alter: false });
+    console.log('✅ Database models synchronized');
   } catch (error) {
     console.error('❌ PostgreSQL Connection Error:', error);
-    process.exit(1);
+    // Don't exit, let the server run and handle errors gracefully
   }
 };
 

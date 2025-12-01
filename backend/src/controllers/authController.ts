@@ -10,7 +10,7 @@ const generateToken = (id: number): string => {
   }
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE || '7d',
-  });
+  } as jwt.SignOptions);
 };
 
 // @desc    Register new user

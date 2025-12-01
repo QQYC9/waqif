@@ -22,7 +22,8 @@ export const getProducts = async (req: AuthRequest, res: Response): Promise<void
     // Check cache
     const cached = getCache<any>(cacheKey);
     if (cached) {
-      return res.status(200).json(cached);
+      res.status(200).json(cached);
+      return;
     }
 
     const where: any = {};
@@ -92,7 +93,8 @@ export const getProduct = async (req: AuthRequest, res: Response): Promise<void>
     // Check cache
     const cached = getCache<any>(cacheKey);
     if (cached) {
-      return res.status(200).json(cached);
+      res.status(200).json(cached);
+      return;
     }
 
     const product = await Product.findByPk(req.params.id, {
