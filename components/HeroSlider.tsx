@@ -69,8 +69,8 @@ const HeroSlider: React.FC = () => {
 
   return (
     <div className="relative w-full overflow-hidden bg-gray-100">
-      {/* Responsive height: mobile (h-64), tablet (h-80), desktop (h-96 to h-[600px]) */}
-      <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-[500px] xl:h-[600px]">
+      {/* Responsive height - taller on mobile to show full image */}
+      <div className="relative w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[550px] xl:h-[600px]">
         {heroImages.map((hero, index) => {
           const isActive = index === currentIndex;
           
@@ -102,7 +102,7 @@ const HeroSlider: React.FC = () => {
                 <img
                   src={hero.desktopImage}
                   alt={hero.alt}
-                  className="w-full h-full object-cover object-center"
+                  className="w-full h-full object-contain object-center"
                   loading="eager"
                   draggable="false"
                   onError={(e) => {
