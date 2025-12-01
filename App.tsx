@@ -28,35 +28,52 @@ function App() {
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Function to refresh all data
+  const refreshData = async () => {
+    setRefreshing(true);
+    try {
+      const [categoriesRes, subCategoriesRes, productsRes] = await Promise.all([
+        getCategories(),
+        getSubCategories(),
+        getProducts(), // Get all products (no pagination)
+      ]);
+
+      if (categoriesRes.success) {
+        setCategories(categoriesRes.data);
+      }
+
+      if (subCategoriesRes.success) {
+        setSubCategories(subCategoriesRes.data);
+      }
+
+      if (productsRes.success) {
+        setProducts(productsRes.data);
+        console.log('Products loaded:', productsRes.data.length);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const [categoriesRes, subCategoriesRes, productsRes] = await Promise.all([
-          getCategories(),
-          getSubCategories(),
-          getProducts(), // Get all products (no pagination)
-        ]);
-
-        if (categoriesRes.success) {
-          setCategories(categoriesRes.data);
-        }
-
-        if (subCategoriesRes.success) {
-          setSubCategories(subCategoriesRes.data);
-        }
-
-        if (productsRes.success) {
-          setProducts(productsRes.data);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
+      setLoading(true);
+      await refreshData();
+      setLoading(false);
     };
 
     fetchData();
+
+    // Auto-refresh every 30 seconds to catch new products
+    const interval = setInterval(() => {
+      refreshData();
+    }, 30000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const toggleSidebar = () => {
@@ -124,7 +141,7 @@ function App() {
                             />
                           } 
                         />
-                        <Route path="/product/:productId" element={<ProductDetailPage products={products} />} />
+                        <Route path="/product/:productId" element={<ProductDetailPage products={products} categories={categories} subCategories={subCategories} />} />
                       </Routes>
                     </main>
                     <Footer />

@@ -67,7 +67,6 @@ const AdminDashboardPage: React.FC = () => {
   // Product State
   const [newProductName, setNewProductName] = useState('');
   const [newProductSubCategory, setNewProductSubCategory] = useState<number | ''>('');
-  const [newProductPrice, setNewProductPrice] = useState<number | ''>('');
   const [newProductDesc, setNewProductDesc] = useState('');
   const [newProductSpecs, setNewProductSpecs] = useState('');
   const [newProductImage, setNewProductImage] = useState('');
@@ -271,7 +270,7 @@ const AdminDashboardPage: React.FC = () => {
 
   // Products Handlers
   const handleAddProduct = async () => {
-    if (!newProductName.trim() || !newProductSubCategory || !newProductPrice || !newProductDesc.trim()) {
+    if (!newProductName.trim() || !newProductSubCategory || !newProductDesc.trim()) {
       showMessage('error', 'جميع الحقول مطلوبة');
       return;
     }
@@ -282,14 +281,13 @@ const AdminDashboardPage: React.FC = () => {
         name: newProductName,
         description: newProductDesc,
         specifications: newProductSpecs,
-        price: Number(newProductPrice),
+        price: 0, // Default price is 0 (not displayed)
         image: newProductImage || '/images/placeholder.jpg',
       });
 
       if (res.success) {
         setNewProductName('');
         setNewProductSubCategory('');
-        setNewProductPrice('');
         setNewProductDesc('');
         setNewProductSpecs('');
         setNewProductImage('');
@@ -655,13 +653,6 @@ const AdminDashboardPage: React.FC = () => {
               );
             })}
           </select>
-          <input
-            type="number"
-            value={newProductPrice}
-            onChange={(e) => setNewProductPrice(e.target.value ? Number(e.target.value) : '')}
-            placeholder="السعر"
-            className="p-2 border rounded"
-          />
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">رفع صورة المنتج</label>
             <input
@@ -708,7 +699,6 @@ const AdminDashboardPage: React.FC = () => {
                   <span className="font-bold">{prod.name}</span>
                   <span className="text-xs text-gray-500">{sub?.name}</span>
                 </div>
-                <span className="font-mono text-teal-600">{prod.price} ر.س</span>
                 <button onClick={() => handleDeleteProduct(prod.id)} className="text-red-500 hover:text-red-700">
                   حذف
                 </button>
