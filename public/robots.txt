@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://waqif-international.com/sitemap.xml
